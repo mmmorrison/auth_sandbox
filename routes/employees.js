@@ -7,8 +7,20 @@ function Employees() {
 }
 
 router.get('/', function(req, res, next) {
-  knex.raw('SELECT * from employees').then(function (employees) {
+  var line1 = 'SELECT employees.name, teams.team_name FROM employees ';
+  var line2 = 'JOIN assignments ON employees.id = assignments.employee_id ';
+  var line3 = 'JOIN teams ON teams.id = assignments.team_id';
+  var line4 = line1 + line2 + line3;
+
+  knex.raw(line4).then(function(employees){
     employees = employees.rows;
+    var people = [];
+    employees.forEach(function(employee){
+      in_array = people.filter(function(x){
+        return x.name === employee.name;
+      })
+      console.log(in_array);
+    });
       res.render('employees/index', {employees: employees});
     });
 });

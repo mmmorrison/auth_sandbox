@@ -7,8 +7,8 @@ function Employees() {
 }
 
 router.get('/', function(req, res, next) {
-    console.log("reached employees");
-    Employees().select().then(function (employees) {
+  knex.raw('SELECT * from employees').then(function (employees) {
+    employees = employees.rows;
       res.render('employees/index', {employees: employees});
     });
 });

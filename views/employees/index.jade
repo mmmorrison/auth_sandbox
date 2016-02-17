@@ -16,10 +16,12 @@ block content
      tbody
        for person in people
          tr
-           td link to edit
+           td 
+             a(href='#') Edit
            td= person.name
            td= person.teams 
-           td link to delete
+           td 
+             a(href='#') Delete
 
 
    div

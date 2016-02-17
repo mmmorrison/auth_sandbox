@@ -11,17 +11,28 @@ router.get('/', function(req, res, next) {
   var line2 = 'JOIN assignments ON employees.id = assignments.employee_id ';
   var line3 = 'JOIN teams ON teams.id = assignments.team_id';
   var line4 = line1 + line2 + line3;
+  var people = [];
+
 
   knex.raw(line4).then(function(employees){
     employees = employees.rows;
-    var people = [];
     employees.forEach(function(employee){
-      in_array = people.filter(function(x){
+       var in_array = people.filter(function(x){
         return x.name === employee.name;
       })
-      console.log(in_array);
+      if (in_array.length === 0){
+        var team_array = [];
+        team_array.push(employee.team_name);
+        people.push({name: employee.name, teams: team_array})
+      } else{
+        people.forEach(function(person) {
+          if (person.name === employee.name){
+            person.teams.push(employee.team_name)
+          }
+        })
+      }
     });
-      res.render('employees/index', {employees: employees});
+      res.render('employees/index', {employees: employees, people: people});
     });
 });
 
